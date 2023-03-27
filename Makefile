@@ -31,8 +31,12 @@ depsdev:
 	go install github.com/Songmu/ghch/cmd/ghch@latest
 	go install github.com/Songmu/gocredits/cmd/gocredits@latest
 	go install github.com/securego/gosec/v2/cmd/gosec@latest
+	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+	go install github.com/sorcererxw/protoc-gen-go-grpc-mock@latest
+	go install github.com/pepabo/protoc-gen-go-client@latest
 
-buildexample: build
+buildexample: build depsdev
 	cd example/ && env PATH="${PWD}:${PATH}" buf generate
 
 prerelease:
