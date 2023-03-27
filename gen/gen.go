@@ -59,10 +59,8 @@ func (gen *Generator) Generate() error {
 	if !gen.samePackage {
 		g.P(fmt.Sprintf("%s %s", tmppf.GoPackageName, tmppf.GoImportPath.String()))
 	}
-	//g.P(`"reflect"`)
 	g.P("")
 	g.P(`"github.com/golang/mock/gomock"`)
-	//g.P(`"google.golang.org/grpc"`)
 	g.P(`)`)
 	g.P("")
 
@@ -85,9 +83,9 @@ func (gen *Generator) Generate() error {
 		}
 		for _, s := range pf.Services {
 			if gen.samePackage {
-				g.P(fmt.Sprintf("mock%s *Mock%sClient", string(s.Desc.FullName().Name()), s.Desc.FullName().Name()))
+				g.P(fmt.Sprintf("mock%s *Mock%sClient", s.Desc.FullName().Name(), s.Desc.FullName().Name()))
 			} else {
-				g.P(fmt.Sprintf("mock%s *%s.Mock%sClient", string(s.Desc.FullName().Name()), tmppf.GoPackageName, s.Desc.FullName().Name()))
+				g.P(fmt.Sprintf("mock%s *%s.Mock%sClient", s.Desc.FullName().Name(), tmppf.GoPackageName, s.Desc.FullName().Name()))
 			}
 		}
 	}
@@ -105,9 +103,9 @@ func (gen *Generator) Generate() error {
 		}
 		for _, s := range pf.Services {
 			if gen.samePackage {
-				g.P(fmt.Sprintf("mock%s: NewMock%sClient(ctrl),", string(s.Desc.FullName().Name()), s.Desc.FullName().Name()))
+				g.P(fmt.Sprintf("mock%s: NewMock%sClient(ctrl),", s.Desc.FullName().Name(), s.Desc.FullName().Name()))
 			} else {
-				g.P(fmt.Sprintf("mock%s: %s.NewMock%sClient(ctrl),", string(s.Desc.FullName().Name()), tmppf.GoPackageName, s.Desc.FullName().Name()))
+				g.P(fmt.Sprintf("mock%s: %s.NewMock%sClient(ctrl),", s.Desc.FullName().Name(), tmppf.GoPackageName, s.Desc.FullName().Name()))
 			}
 		}
 	}
@@ -141,7 +139,19 @@ func (gen *Generator) Generate() error {
 				g.P("")
 
 			} else {
-				panic("not implemented")
+
+				g.P(fmt.Sprintf("func (m *MockClient) %s() %s.%sClient {", s.Desc.FullName().Name(), tmppf.GoPackageName, s.Desc.FullName().Name()))
+				g.P("m.ctrl.T.Helper()")
+				g.P(fmt.Sprintf("return m.recorder.mock%s", s.Desc.FullName().Name()))
+				g.P("}")
+				g.P("")
+
+				g.P(fmt.Sprintf("func (mr *MockClientMockRecorder) %s() *%s.Mock%sClientMockRecorder {", s.Desc.FullName().Name(), tmppf.GoPackageName, s.Desc.FullName().Name()))
+				g.P("mr.mock.ctrl.T.Helper()")
+				g.P(fmt.Sprintf("return mr.mock%s.EXPECT()", s.Desc.FullName().Name()))
+				g.P("}")
+				g.P("")
+
 			}
 		}
 	}

@@ -18,7 +18,7 @@ ci: test testexample
 test:
 	go test ./... -coverprofile=coverage.out -covermode=count
 
-testexample:
+testexample: example
 	cd example/ && go test ./...
 
 lint:
