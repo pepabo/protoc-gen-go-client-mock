@@ -18,7 +18,7 @@ ci: test testexample
 test:
 	go test ./... -coverprofile=coverage.out -covermode=count
 
-testexample: example
+testexample: buildexample
 	cd example/ && go test ./...
 
 lint:
@@ -26,9 +26,6 @@ lint:
 
 build:
 	go build -ldflags="$(BUILD_LDFLAGS)"
-
-example: build
-	cd example/ && buf generate
 
 depsdev:
 	go install github.com/Songmu/ghch/cmd/ghch@latest

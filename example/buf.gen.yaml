@@ -18,5 +18,4 @@ plugins:
     opt: paths=source_relative,same_package
   - plugin: go-client-mock
     out: gen/go
-    path: ["../protoc-gen-go-client-mock"]
     opt: paths=source_relative,same_package
