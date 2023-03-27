@@ -36,7 +36,7 @@ depsdev:
 	go install github.com/sorcererxw/protoc-gen-go-grpc-mock@latest
 	go install github.com/pepabo/protoc-gen-go-client@latest
 
-buildexample: build
+buildexample: build depsdev
 	cd example/ && env PATH="${PWD}:${PATH}" buf generate
 
 prerelease:
