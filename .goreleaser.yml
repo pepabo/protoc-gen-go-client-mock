@@ -1,0 +1,62 @@
+before:
+  hooks:
+    - go mod download
+    - go mod tidy
+builds:
+  -
+    id: protoc-gen-go-client-mock-darwin
+    ldflags:
+      - -s -w -X github.com/pepabo/protoc-gen-go-client-mock.version={{.Version}} -X github.com/pepabo/protoc-gen-go-client-mock.commit={{.FullCommit}} -X github.com/pepabo/protoc-gen-go-client-mock.date={{.Date}} -X github.com/pepabo/protoc-gen-go-client-mock/version.Version={{.Version}}
+    goos:
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+  -
+    id: protoc-gen-go-client-mock-linux
+    ldflags:
+      - -s -w -X github.com/pepabo/protoc-gen-go-client-mock.version={{.Version}} -X github.com/pepabo/protoc-gen-go-client-mock.commit={{.FullCommit}} -X github.com/pepabo/protoc-gen-go-client-mock.date={{.Date}} -X github.com/pepabo/protoc-gen-go-client-mock/version.Version={{.Version}}
+    goos:
+      - linux
+    goarch:
+      - amd64
+archives:
+  -
+    id: protoc-gen-go-client-mock-archive
+    name_template: '{{ .ProjectName }}_v{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+    format_overrides:
+      - goos: darwin
+        format: zip
+    files:
+      - LICENSE
+      - CREDITS
+      - README.md
+      - CHANGELOG.md
+    rlcp: true
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Version }}-next"
+changelog:
+  skip: true
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
+nfpms:
+  -
+    id: protoc-gen-go-client-mock-nfpms
+    file_name_template: "{{ .ProjectName }}_{{ .Version }}-1_{{ .Arch }}"
+    builds:
+      - protoc-gen-go-client-mock-linux
+    homepage: https://github.com/pepabo/protoc-gen-go-client-mock
+    maintainer: 'GMO Pepabo, inc.'
+    description: protoc-gen-go-client-mock is a protoc plugin that generates a mock of client that bundles gRPC Clients for multiple services.
+    license: MIT
+    formats:
+      - deb
+      - rpm
+      - apk
+    bindir: /usr/bin
+    epoch: 1

@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package myapp;
+
+service UserService {
+  rpc ListUsers(ListUsersRequest) returns (stream UserResponse);
+  rpc CreateUser(CreateUserRequest) returns (UserResponse);
+}
+
+message ListUsersRequest {
+  int64 page = 1;
+}
+
+message CreateUserRequest {
+  string name = 1;
+  string email = 2;
+}
+
+message UserResponse {
+  string name = 1;
+  string email = 2;
+}

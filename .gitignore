@@ -1,0 +1,3 @@
+/dist
+protoc-gen-go-client-mock
+coverage.out

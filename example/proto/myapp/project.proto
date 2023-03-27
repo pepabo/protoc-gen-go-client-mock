@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package myapp;
+
+service ProjectService {
+  rpc ListProjects(ListProjectsRequest) returns (stream ProjectResponse);
+  rpc CreateProject(CreateProjectRequest) returns (ProjectResponse);
+}
+
+message ListProjectsRequest {
+  int64 page = 1;
+}
+
+message CreateProjectRequest {
+  string name = 1;
+}
+
+message ProjectResponse {
+  string name = 1;
+}
