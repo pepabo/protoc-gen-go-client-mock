@@ -23,6 +23,7 @@ jobs:
         uses: k1LoW/gh-setup@v1
         with:
           repo: bufbuild/buf
+          match: ^buf
 
       - name: Run test
         run: make ci
