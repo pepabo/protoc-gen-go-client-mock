@@ -15,11 +15,13 @@ import (
 const (
 	optPackage     = "package"
 	optSamePackage = "same_package"
+	optWithClose   = "with_close"
 )
 
 type Generator struct {
 	genp        *protogen.Plugin
 	samePackage bool
+	withClose   bool
 	packageName string
 }
 
@@ -56,10 +58,13 @@ func (gen *Generator) Generate() error {
 	}
 	g.P("")
 	g.P(`import (`)
+	if gen.withClose {
+		g.P(`"reflect"`)
+		g.P("")
+	}
 	if !gen.samePackage {
 		g.P(fmt.Sprintf("%s %s", tmppf.GoPackageName, tmppf.GoImportPath.String()))
 	}
-	g.P("")
 	g.P(`"github.com/golang/mock/gomock"`)
 	g.P(`)`)
 	g.P("")
@@ -155,6 +160,21 @@ func (gen *Generator) Generate() error {
 			}
 		}
 	}
+	if gen.withClose {
+		g.P("func (m *MockClient) Close() error {")
+		g.P("m.ctrl.T.Helper()")
+		g.P(`ret := m.ctrl.Call(m, "Close")`)
+		g.P(`ret0, _ := ret[0].(error)`)
+		g.P(`return ret0`)
+		g.P("}")
+		g.P("")
+
+		g.P("func (mr *MockClientMockRecorder) Close() *gomock.Call {")
+		g.P("mr.mock.ctrl.T.Helper()")
+		g.P(`return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Close", reflect.TypeOf((*MockClient)(nil).Close))`)
+		g.P("}")
+		g.P("")
+	}
 
 	return nil
 }
@@ -166,6 +186,8 @@ func (gen *Generator) parseOpts() error {
 		switch {
 		case o == optSamePackage:
 			gen.samePackage = true
+		case o == optWithClose:
+			gen.withClose = true
 		case strings.HasPrefix(o, fmt.Sprintf("%s=", optPackage)):
 			gen.packageName = strings.TrimPrefix(o, fmt.Sprintf("%s=", optPackage))
 		}

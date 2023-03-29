@@ -15,7 +15,7 @@ plugins:
     opt: paths=source_relative
   - plugin: go-client
     out: gen/go
-    opt: paths=source_relative,same_package
+    opt: paths=source_relative,same_package,with_close
   - plugin: go-client-mock
     out: gen/go
-    opt: paths=source_relative,same_package
+    opt: paths=source_relative,same_package,with_close

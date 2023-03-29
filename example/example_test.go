@@ -42,8 +42,13 @@ func TestClientUser(t *testing.T) {
 func TestClientProject(t *testing.T) {
 	ctx := context.Background()
 	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
+	t.Cleanup(func() {
+		ctrl.Finish()
+	})
 	client := myapp.NewMockClient(ctrl)
+	t.Cleanup(func() {
+		client.Close()
+	})
 	req := &myapp.ListProjectsRequest{
 		Page: 1,
 	}
@@ -57,6 +62,8 @@ func TestClientProject(t *testing.T) {
 	lc.EXPECT().Recv().Return(res[1], nil)
 	lc.EXPECT().Recv().Return(nil, io.EOF)
 	client.EXPECT().ProjectService().ListProjects(ctx, req).Return(lc, nil)
+	client.EXPECT().Close().Return(nil)
+
 	rc, err := client.ProjectService().ListProjects(ctx, req)
 	if err != nil {
 		t.Fatal(err)
