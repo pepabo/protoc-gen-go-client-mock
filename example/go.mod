@@ -3,8 +3,8 @@ module github.com/pepabo/protoc-gen-go-client-mock/example
 go 1.20
 
 require (
-	github.com/golang/mock v1.6.0
 	github.com/google/go-cmp v0.5.9
+	go.uber.org/mock v0.2.0
 	google.golang.org/grpc v1.54.0
 	google.golang.org/protobuf v1.30.0
 )
