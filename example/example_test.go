@@ -6,10 +6,10 @@ import (
 	"io"
 	"testing"
 
-	"github.com/golang/mock/gomock"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/pepabo/protoc-gen-go-client-mock/example/gen/go/myapp"
+	"go.uber.org/mock/gomock"
 )
 
 func TestClientUser(t *testing.T) {
