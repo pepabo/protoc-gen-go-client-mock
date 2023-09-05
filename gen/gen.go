@@ -65,7 +65,7 @@ func (gen *Generator) Generate() error {
 	if !gen.samePackage {
 		g.P(fmt.Sprintf("%s %s", tmppf.GoPackageName, tmppf.GoImportPath.String()))
 	}
-	g.P(`"github.com/golang/mock/gomock"`)
+	g.P(`"go.uber.org/mock/gomock"`)
 	g.P(`)`)
 	g.P("")
 
